@@ -20,7 +20,17 @@ void BSTree_MidTraverse(BSTree tree);
 
 void BSTree_PostTraverse(BSTree tree);
 
+BSTreeNode *BSTree_Search_Traverse(BSTree tree, int key);
 
+BSTreeNode *BSTree_Search_Iterate(BSTree tree, int key);
 
+BSTreeNode *BSTree_Minimum(BSTree tree);
 
+BSTreeNode *BSTree_Maximum(BSTree tree);
+
+BSTreeNode *BSTree_Successor(BSTreeNode *node);
+
+BSTreeNode *BSTree_Predecessor(BSTreeNode *node);
+
+BSTree BSTree_Delete(BSTree tree, int key);
 #endif

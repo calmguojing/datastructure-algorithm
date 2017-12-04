@@ -48,13 +48,14 @@ static BSTree BSTreeNode_Insert(BSTree tree, BSTreeNode *node){
 
 BSTree BSTree_Insert(BSTree tree, int key){
     BSTreeNode *newnode = (BSTreeNode *)malloc(sizeof(BSTreeNode));
-    BSTree ret = NULL;
+    
     if(newnode != NULL){
         newnode->key = key;
         newnode->left = NULL;
         newnode->right = NULL;
         newnode->parent = NULL;
     }
+    
     BSTreeNode *current = tree;
     BSTreeNode *parent = NULL;
 
@@ -108,3 +109,142 @@ void BSTree_PostTraverse(BSTree tree){
         printf("%d", tree->key);
     }
 }
+
+
+BSTreeNode *BSTree_Search_Traverse(BSTree tree, int key){
+    if(tree == NULL || tree->key == key){
+        return tree;
+    }
+
+    if(key < tree->key){
+        return BSTree_Search_Traverse(tree->left, key);
+    }else{
+        return BSTree_Search_Traverse(tree->right, key);
+    }
+}
+
+BSTreeNode *BSTree_Search_Iterate(BSTree tree, int key){
+    if(tree == NULL || tree->key == key){
+        return tree;
+    }
+    BSTreeNode *current = tree;
+    while((current != NULL) && (current->key != key)){
+        if(key < current->key){
+            current = current->left;
+        }else{
+            current = current->right;
+        }
+    }
+    return current;
+}
+BSTreeNode *BSTree_Minimum(BSTree tree){
+    if(tree == NULL){
+        return tree;
+    }
+
+    BSTreeNode *current = tree;
+    while(current->left != NULL){
+        current = current->left;
+    }
+
+    return current;
+}
+
+
+BSTreeNode *BSTree_Maximum(BSTree tree){
+    if(tree == NULL){
+        return tree;
+    }
+
+    BSTreeNode *current = tree;
+    while(current->right != NULL){
+        current = current->right;
+    }
+
+    return current;
+}
+
+
+BSTreeNode *BSTree_Successor(BSTreeNode *node){
+    BSTreeNode *parent = NULL;
+    BSTreeNode *current = node;
+    if(node == NULL){
+        return NULL;
+    }
+
+    if(node->right != NULL){
+        return BSTree_Minimum(node->right);
+    }
+
+    parent = node->parent;
+    while((parent != NULL) && (current == parent->right)){
+        current = parent;
+        parent = parent->parent;
+    }
+
+    return parent;
+}
+
+BSTreeNode *BSTree_Predecessor(BSTreeNode *node){
+    BSTreeNode *parent = NULL;
+    BSTreeNode *current = node;
+
+    if(node == NULL){
+        return NULL;
+    }
+
+    if(node->left != NULL){
+        return BSTree_Maximum(node->left);
+    }
+
+    parent = node->parent;
+    while((parent != NULL) && (current == parent->left)){
+        current = parent;
+        parent = parent->parent;
+    }
+
+    return parent;
+}
+
+static BSTreeNode *BSTree_Delete_Node(BSTree tree, BSTreeNode *node){
+    BSTreeNode *real = NULL;
+    BSTreeNode *child = NULL;
+    
+    if((node->left == NULL) || (node->right == NULL)){
+        real = node;
+    }else{
+        real = BSTree_Successor(node);
+    }
+    
+    if(real->left != NULL){
+        child = real->left;
+    }else{
+        child = real->right;
+    }
+
+    if(child != NULL){
+        child->parent = real->parent;
+    }
+    
+    if(real->parent == NULL){
+        tree = child;
+    }else if(real == real->parent->left){
+        real->parent->left = child;
+    }else{
+        real->parent->right = child;
+    }
+
+    if(real != node){
+        node->key = real->key;
+    }
+
+    return real;
+
+}
+BSTreeNode *BSTree_Delete(BSTree tree, int key){
+    BSTreeNode *node;
+    if((node = BSTree_Search_Traverse(tree, key)) != NULL){
+       return BSTree_Delete_Node(tree, node);
+    }
+}
+

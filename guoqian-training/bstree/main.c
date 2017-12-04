@@ -22,4 +22,21 @@ int main(){
     printf("\n");
     BSTree_MidTraverse(tree);
     printf("\n");
+    BSTreeNode *s = BSTree_Search_Traverse(tree, 8);
+    printf("%d\n", s->key);
+    BSTreeNode *r = BSTree_Search_Iterate(tree, 4);
+    printf("%d\n", r->key);
+    BSTreeNode *min = BSTree_Minimum(tree);
+    printf("min:%d\n", min->key);
+    BSTreeNode *max = BSTree_Maximum(tree);
+    printf("max:%d\n", max->key);
+    BSTreeNode *su = BSTree_Successor(tree);
+    printf("%d\n", su->key);
+    BSTreeNode *pre = BSTree_Predecessor(tree);
+    printf("%d\n", pre->key);
+
+    BSTreeNode *de = BSTree_Delete(tree, 5);
+    printf("\npretraverse\n");
+    BSTree_PreTraverse(tree);
+    printf("\n");
 }
